@@ -1,0 +1,48 @@
+.projectDisp{
+	background-color: lightgray;
+	position: relative;
+	height: :900px;
+	border: 1px solid black;
+	margin: 10px;
+	padding: 1em;
+
+
+}
+
+.projectNames{
+	color: darkblue;
+	font-family: Arial, Helvetica, sans-serif;
+	position: relative;
+	width: 300px;
+
+	
+}
+
+.projectTytle{
+	position: relative;
+	left:0;
+	font-size: 40px;
+	width: 300px;
+	padding: 5px;
+}
+
+.projectDesc{
+	color: dodgerblue;
+	position: relative;
+	left:0;
+	size: 10px;
+	padding: 5px;
+
+}
+
+.grantsBar{
+	background-color: white;
+	position: absolute;
+	padding: 1em;
+	width:300px;
+	height: 30px;
+	left: 400px;
+	top:30px;
+	width: 65%;
+	border: 1px solid black;
+}
