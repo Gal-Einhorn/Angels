@@ -1,6 +1,6 @@
 var limit = 200000; 
+var totalMax;
 var angelsBalance = [limit,limit,limit,limit,limit,limit];
-var projectsBalance = [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]]; //to change into an array of objects
 var balance = [
   {"projectId":0,"balance":0},
   {"projectId":1,"balance":0},
@@ -9,7 +9,6 @@ var balance = [
   {"projectId":4,"balance":0},
   {"projectId":5,"balance":0}
   ];
-
 
 var ref = new Firebase("https://searsangels.firebaseio.com/");
 var angels;
@@ -59,6 +58,11 @@ function calculateAngelsBalance(){
 function calculateProjectsBalance(){
   for (var projectId=0; projectId<projects.length; projectId++){
     balance[projectId].balance = 0;
+    if (typeof projects[projectId].grantsDist !== "undefined"){
+      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){   
+        balance[projectId].balance += projects[projectId].grantsDist[grantId].sum;
+      }
+    }
  }
 }
 
@@ -89,7 +93,8 @@ function showNextAngelGrant(projectId,angel){
     for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
       if (projects[projectId].grantsDist[grantId].angelId == angel){
         var grant = projects[projectId].grantsDist[grantId];
-        var percentage = grant.sum*100/limit;
+        calculateMaxGrant();
+        var percentage = grant.sum*100/totalMax;
         $('#grantMarkProject' + projectId + 'Angel' + angel).css({
             "width" : percentage + "%",
             "background-color" : angels[angel].color,
@@ -97,5 +102,10 @@ function showNextAngelGrant(projectId,angel){
         });
       }
     }  
+}
+
+function calculateMaxGrant(){
+  rankProjects();
+  totalMax = balance[5].balance;
 }
 
