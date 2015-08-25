@@ -9,7 +9,7 @@ var balance = [
   {"projectId":4,"balance":0},
   {"projectId":5,"balance":0}
   ];
-var angelProject = {"lasnAngel": 0, "lastProject":0};
+var angelProject = {"lastAngel": 0, "lastProject":0};
 var ref = new Firebase("https://searsangels.firebaseio.com/");
 var angels;
 var projects;
@@ -42,7 +42,7 @@ function showProjects(){
 
 function calculateMaxGrant(){
   rankProjects();
-  totalMax = balance[5].balance + 1000;
+  totalMax = balance[5].balance + 3000;
 }
 
 function rankProjects(){
@@ -71,15 +71,18 @@ function calculateProjectsBalance(){
 }
 
 function showNextGrant(){
-  if (angelProject.lasnAngel < angels.length){
-    showNextAngelGrant(angelProject.lastProject, angelProject.lasnAngel);
-    angelProject.lasnAngel +=1;
+  if (angelProject.lastProject < projects.length){
+    showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
+    angelProject.lastProject +=1;
+    console.log ('1. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
   }
   else {
-    angelProject.lastProject +=1
-    angelProject.lasnAngel = 0;
-    showNextAngelGrant(angelProject.lastProject, angelProject.lasnAngel);
-    angelProject.lasnAngel +=1;
+    angelProject.lastAngel +=1;
+    angelProject.lastProject = 0;
+    console.log ('2. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
+    showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
+    angelProject.lastProject +=1;
+        console.log ('3. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
   }
 }
 
