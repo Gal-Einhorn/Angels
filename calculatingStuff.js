@@ -9,9 +9,7 @@ var balance = [
   {"projectId":4,"balance":0},
   {"projectId":5,"balance":0}
   ];
-
 var angelProject = {"lasnAngel": 0, "lastProject":0};
-
 var ref = new Firebase("https://searsangels.firebaseio.com/");
 var angels;
 var projects;
@@ -29,10 +27,6 @@ ref.on("value", function(snapshot) {
    }
 );
 
-function click(event) {
-    alert('Clicked. The event is' + event);
-}
-
 function showProjects(){
     for (var project=0; project<projects.length; project++){  
       $('body').append('<div class="projectDisp" id="project'+ project + '"/>');
@@ -46,30 +40,9 @@ function showProjects(){
     }
 }
 
-function calculateAngelsBalance(){
-  angelsBalance = [limit,limit,limit,limit,limit,limit];
-  for (var projectId=0; projectId<projects.length; projectId++){
-    if (typeof projects[projectId].grantsDist === "undefined"){
-      console.log("projectId=" + projectId + " has no grants");
-      }
-    else {
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
-        angelsBalance[projects[projectId].grantsDist[grantId].angelId] -= projects[projectId].grantsDist[grantId].sum;
-      }
-    }  
-  }
-
-}
-  
-function calculateProjectsBalance(){
-  for (var projectId=0; projectId<projects.length; projectId++){
-    balance[projectId].balance = 0;
-    if (typeof projects[projectId].grantsDist !== "undefined"){
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){   
-        balance[projectId].balance += projects[projectId].grantsDist[grantId].sum;
-      }
-    }
- }
+function calculateMaxGrant(){
+  rankProjects();
+  totalMax = balance[5].balance + 1000;
 }
 
 function rankProjects(){
@@ -86,13 +59,15 @@ function rankProjects(){
   }
 }
 
-function isTheSecondvalueBigger(firstValue,secondValue) {
-  if (firstValue.balance > secondValue.balance){
-    return false;
-  }
-  else {
-    return true;
-  }
+function calculateProjectsBalance(){
+  for (var projectId=0; projectId<projects.length; projectId++){
+    balance[projectId].balance = 0;
+    if (typeof projects[projectId].grantsDist !== "undefined"){
+      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){   
+        balance[projectId].balance += projects[projectId].grantsDist[grantId].sum;
+      }
+    }
+ }
 }
 
 function showNextGrant(){
@@ -122,7 +97,20 @@ function showNextAngelGrant(projectId,angel){
     }  
 }
 
-function calculateMaxGrant(){
-  rankProjects();
-  totalMax = balance[5].balance + 1000;
+function calculateAngelsBalance(){
+  angelsBalance = [limit,limit,limit,limit,limit,limit];
+  for (var projectId=0; projectId<projects.length; projectId++){
+    if (typeof projects[projectId].grantsDist === "undefined"){
+      console.log("projectId=" + projectId + " has no grants");
+      }
+    else {
+      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
+        angelsBalance[projects[projectId].grantsDist[grantId].angelId] -= projects[projectId].grantsDist[grantId].sum;
+      }
+    }  
+  }
+
 }
+  
+
+
