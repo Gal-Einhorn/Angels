@@ -74,15 +74,13 @@ function showNextGrant(){
   if (angelProject.lastProject < projects.length){
     showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
     angelProject.lastProject +=1;
-    console.log ('1. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
+
   }
   else {
     angelProject.lastAngel +=1;
-    angelProject.lastProject = 0;
-    console.log ('2. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
+    angelProject.lastProject = 0;    
     showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
     angelProject.lastProject +=1;
-        console.log ('3. project = ' + angelProject.lastProject + ', angel = ' + angelProject.lastAngel);
   }
 }
 
