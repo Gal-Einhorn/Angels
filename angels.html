@@ -2,117 +2,33 @@
 <head>
 <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script>
 
-var limit = 200000; 
-var angelsBalance = [limit,limit,limit,limit,limit,limit];
-var projectsBalance = [[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]];
-var ref = new Firebase("https://searsangels.firebaseio.com/");
-var angels;
-var projects;
-
-
-// Attach an asynchronous callback to read the data at our posts reference
-ref.on("value", function(snapshot) {
-                  console.log(snapshot.val());
-                  angels = snapshot.val().angels;
-                  projects = snapshot.val().projects;
-   },
-   function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
-   }
-);
-
-function calculateAngelsBalance(){
-  for (var projectId=0; projectId<projects.length; projectId++){
-    if (typeof projects[projectId].grantsDist === "undefined"){
-      console.log("projectId=" + projectId + " has no grants");
-      }
-    else {
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
-        angelsBalance[projects[projectId].grantsDist[grantId].angelId] -= projects[projectId].grantsDist[grantId].sum;
-      }
-    }  
-  }
-  
-  for (var angelId=0; angelId<angels.length; angelId++){
-    document.getElementById("angelsBalance").innerHTML += angels[angelId].name + "'s balance is " + angelsBalance[angelId] + '</br>';
-  }
-}
-  
-function calculateProjectsBalance(){
-  document.getElementById("projectsBalance").innerHTML += '</br>';
-  for (var projectId=0; projectId<projects.length; projectId++){
-    projectsBalance[projectId][1] = 0;
-    if (typeof projects[projectId].grantsDist !== "undefined"){
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
-        projectsBalance[projectId][1] += projects[projectId].grantsDist[grantId].sum;
-      }
-    }
-    document.getElementById("projectsBalance").innerHTML += projects[projectId].name + "'s balance is " + projectsBalance[projectId][1] + '</br>';
-  }
-}
-
-//ranks the projects - from rich to poor
-function rankProjects(){
-   var listIsNotSorted = true;
-   while (listIsNotSorted){
-        var permutations = 0;
-        for (var projectId=0; projectId<projects.length -1 ; projectId++){
-            var temp;
-             if (isTheSecondvalueBigger(projectsBalance[projectId][1],projectsBalance[projectId+1][1])){ 
-                   permutations += 1;
-                   temp = [projectsBalance[projectId][0],projectsBalance[projectId][1]];
-                   projectsBalance[projectId][0] = projectsBalance[projectId +1][0];
-                   projectsBalance[projectId][1] = projectsBalance[projectId +1][1];
-                   projectsBalance[projectId +1] = temp;  
-               }
-           }
-           if (permutations>0){
-                listIsNotSorted = true;
-          }
-          else
-              {listIsNotSorted = false;}
-     }
-     console.log("Balance:");
-     for (var i=0; i<6; i++){
-        console.log(projectsBalance[i][0] + ',' + projectsBalance[i][1]);
-     }
-}
-
-function isTheSecondvalueBigger(firstValue,secondValue) {
-  if (firstValue > secondValue){
-    return false;
-  }
-  else {
-    return true;
-  }
-}
-
-function showRankProjects(){
-  calculateProjectsBalance();
-  rankProjects();
-  for (var projectRank=0; projectRank<projectsBalance.length; projectRank++){
-    projectId = projectsBalance[projectRank][0];
-    document.getElementById("rankedProjects").innerHTML += projects[projectId].name + "'s balance is " + projectsBalance[projectRank][1] + '</br>';
-  }
-}
- 
-</script>
+<script src="calculatingAngels.js"></script>
+<link rel="stylesheet" type="text/css" href="angels.css">
 </head>
+
 <body>
-  
-<h2>Angels balance:</h2>
-<button type="button" onclick="calculateAngelsBalance()">Show angels' balance</button>
-<div id="angelsBalance"></div>
 
-<h2>Projects Balance:</h2>
-<button type="button" onclick="calculateProjectsBalance()">Show projects' balance</button>
-<div id="projectsBalance"></div>
 
-<h2>Ranked Projects:</h2>
-<button type="button" onclick="showRankProjects()">Rank Projects</button>
-<div id="rankedProjects"></div>
+<div id="grants_form">
+<form name="grantsInvoker" action="">
+  <fieldset>
+    <label for="angel" id="angel_label">Angel Id</label>
+    <input type="number" name="angel" id="angel" size="2" value="" class="text-input" />
+    <label class="error" for="angel" id="angel_error">This field is required.</label>
+     
+    <label for="project" id="project_label">Project Id</label>
+    <input type="number" name="project" id="project" size="2" value="" class="text-input" />
+    <label class="error" for="project" id="project_error">This field is required.</label>
+ 
+    <label for="grant" id="grant_label">Grant sum</label>
+    <input type="number" name="grant" id="grant" size="6" value="" class="text-input" />
+    <label class="error" for="grant" id="grant_error">This field is required.</label>    
+      <br />
+    <input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
+  </fieldset>
+</form>
+</div>
 
 </body>
 </html>
