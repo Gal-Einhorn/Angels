@@ -1,52 +1,117 @@
-.projectDisp{
-	background-color: lightgray;
-	position: relative;
-	height: :900px;
-	border: 1px solid black;
-	margin: 10px;
-	padding: 1em;
-
-
+#top{
+	height: 23%;
+	padding-top:0.1%;
 }
+
+#title{
+	float:left;
+	padding-left:10%;
+	height: 73%;
+	width: auto;
+}
+
+#theAngels{
+	float:left;
+	width: 40%;
+	padding-left: 8%;
+	padding-top:1%;
+}
+
+.angels{
+	float:left;
+	vertical-align: middle;
+}
+
+.angelImage{
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	border: 3px solid;
+	margin: 1px;	
+}
+
+.names{
+	color: white;
+	text-align: center;
+	font-size: 16px;
+	font-family: 'PT Sans', sans-serif;
+}
+
+#rankedProjects{
+	padding-left: 10%;	
+	width: 85%;
+}
+
+.backgroundLines{
+	height: 2%;
+	padding-left: 13%;
+}
+
+.theLines{
+	float:left;
+	width: 6.65%;
+	height: 100%;
+	border-left: 1px dashed lightgrey;
+}
+
 
 .projectNames{
-	color: darkblue;
-	font-family: Arial, Helvetica, sans-serif;
-	position: relative;
-	width: 300px;
+	color: white;
+	text-align: center;
+	font-family: 'PT Sans', sans-serif;
+	width: 13%;
+	float: left;  
+	border: 2px solid white;
+	height:6%;
 }
 
-.projectTytle{
-	position: relative;
-	left:0;
-	font-size: 40px;
-	width: 300px;
-	padding: 5px;
+.projectSum{
+	color: white;
+	text-align: center;
+	font-family: 'PT Sans', sans-serif;
+	float:left;
+	font-size:40px;
+	padding-left:2.3%;
+	padding-top:0.3%;
+	vertical-align: middle;
 }
 
-.projectDesc{
-	color: dodgerblue;
-	position: relative;
-	left:0;
-	size: 10px;
-	padding: 5px;
-
+ .projectTytle{
+	vertical-align: middle;
+	font-size: 22px;
+	padding: 7%;
 }
 
 .grantsBar{
 	background-color: white;
-	position: absolute;
-	width:300px;
-	height: 70px;
-	left: 400px;
-	top:20px;
-	width: 65%;
+	height: 6%;
+	width: 70%;
 	border: 1px solid black;
+	float: left;
 }
 
 .grantMark{
-	position: absolote;
 	height: 100%;
 	width:0;
 	float:left;
 }
+
+#logos{
+	padding-top: 6%;
+	padding-left: 70%;
+	width:30%;
+	height: auto;
+}
+
+.clearfix:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+     }
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
