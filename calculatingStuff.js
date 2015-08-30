@@ -1,24 +1,20 @@
 var limit = 200000; 
 var totalMax;
-var angelsBalance = [limit,limit,limit,limit,limit,limit];
-var balance = [
-  {"projectId":0,"balance":0},
-  {"projectId":1,"balance":0},
-  {"projectId":2,"balance":0},
-  {"projectId":3,"balance":0},
-  {"projectId":4,"balance":0},
-  {"projectId":5,"balance":0}
-  ];
 var angelProject = {"lastAngel": 0, "lastProject":0};
-var ref = new Firebase("https://searsangels.firebaseio.com/");
+var dataBsae = "https://searsangels.firebaseio.com/";
+var ref = new Firebase(dataBsae);
 var angels;
 var projects;
+var angelsBalance = [];
+var balance = [];
 
 // Attach an asynchronous callback to read the data at our posts reference
-ref.on("value", function(snapshot) {
+ref.once("value", function(snapshot) {
                console.log(snapshot.val());
                angels = snapshot.val().angels;
                projects = snapshot.val().projects;
+               initiateBalance();
+               showAngels();
                showProjects();     
                calculateMaxGrant(); 
    },
@@ -27,22 +23,50 @@ ref.on("value", function(snapshot) {
    }
 );
 
+function initiateBalance(){
+  for (var project=0; project<projects.length; project++){
+    balance[project] = {"projectId": project, "balance":0};
+  }
+    for (var angel=0; angel<angels.length; angel++){
+    angelsBalance[angel] = limit;
+  }
+}
+
 function showProjects(){
+    $('#rankedProjects').append('<div class="backgroundLines" id="lines'+ project + '"/>');
+       for (var i=0; i<13; i++){
+         $('#lines' + project).append('<div class="theLines"/>');
+       }
     for (var project=0; project<projects.length; project++){  
-      $('body').append('<div class="projectDisp" id="project'+ project + '"/>');
-      $('#project' + project).append('<div class="projectNames" id="projectName' + project + '"/>');
-      $('#projectName' + project).append('<div class="projectTytle" id="projectTytle' + project + '">' + projects[project].name + '</div>');
-      $('#projectName' + project).append('<div class="projectDesc" id="projectDesc' + project + '">'+ projects[project].desc +'</div></div>');                    
-      $('#project' + project).append('<div class="grantsBar" id="grantsBar' + project + '"/></div>');
-      for (var angel=0; angel < angels.length; angel++){
-        $('#grantsBar' + project).append('<div class="grantMark" id="grantMarkProject' + project + 'Angel' + angel + '"/>');
-      }
+        $('#rankedProjects').append('<div class="projectDisp clearfix" id="project'+ project + '"/>');
+        $('#project' + project).append('<div class="projectNames" id="projectName' + project + '"/>');
+        $('#projectName' + project).append('<div class="projectTytle" id="projectTytle' + project + '">' + projects[project].name + '</div>');               
+        $('#project' + project).append('<div class="grantsBar" id="grantsBar' + project + '"/></div>');
+            for (var angel=0; angel < angels.length; angel++){
+                 $('#grantsBar' + project).append('<div class="grantMark" id="grantMarkProject' + project + 'Angel' + angel + '"/>');  
+            }
+        $('#project' + project).append('<div class="projectSum" id="projectSum' + project + '"> $' + balance[project].balance + '</div></div>');
+        $('#rankedProjects').append('<div class="backgroundLines" id="lines'+ project + '"/>');
+           for (var i=0; i<13; i++){
+              $('#lines' + project).append('<div class="theLines"/>');
+           }
     }
+}
+
+function showAngels(){
+  for (var angelId=0; angelId<angels.length; angelId++){
+    $('#theAngels').append('<div class = "angels" id="angel' + angelId +'">');
+    $('#angel' + angelId).append('<img class="angelImage" id="angelImage' + angelId + '" src="angel' +angelId + '.jpg"/>');
+    $('#angelImage' + angelId).css({"border-color" : angels[angelId].color});
+    $('#angel' + angelId).append('<div class="names" id="angelFirstName' + angelId + '">' + angels[angelId].firstName +'</div>');
+    $('#angel' + angelId).append('<div class="names" id="angelLasttName' + angelId + '">' + angels[angelId].lastName +'</div></div>');
+  }
 }
 
 function calculateMaxGrant(){
   rankProjects();
-  totalMax = balance[5].balance + 3000;
+  totalMax = balance[5].balance + 5000;
+  initiateBalance();
 }
 
 function rankProjects(){
@@ -53,30 +77,30 @@ function rankProjects(){
     }
     else return -1;
   })
-  console.log("Balance:");
-     for (var i=0; i<6; i++){
-        console.log(balance[i].projectId+ ',' + balance[i].balance);
-  }
 }
 
 function calculateProjectsBalance(){
   for (var projectId=0; projectId<projects.length; projectId++){
     balance[projectId].balance = 0;
-    if (typeof projects[projectId].grantsDist !== "undefined"){
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){   
-        balance[projectId].balance += projects[projectId].grantsDist[grantId].sum;
+      for (var grantId=0; grantId<angels.length; grantId++){ 
+           balance[projectId].balance += projects[projectId].grantsDist[grantId].sum;
       }
-    }
- }
+   }
 }
 
 function showNextGrant(){
   if (angelProject.lastProject < projects.length){
     showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
     angelProject.lastProject +=1;
-
   }
   else {
+    $('#angelImage' + angelProject.lastAngel).css({
+          	"width" :"70px",
+	          "height" : "70px",
+            "margin-top" : "0",
+            "margin" : "3px",
+            "border" : "3px solid " + angels[angelProject.lastAngel].color,
+        })
     angelProject.lastAngel +=1;
     angelProject.lastProject = 0;    
     showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
@@ -89,29 +113,33 @@ function showNextAngelGrant(projectId,angel){
       if (projects[projectId].grantsDist[grantId].angelId == angel){
         var grant = projects[projectId].grantsDist[grantId];
         var percentage = grant.sum*100/totalMax;
+        $('#angelImage' + angel).css({
+          	"width" :"120px",
+	          "height" : "120px",
+            "margin-top": "-9%",
+            "border" : "5px solid " + angels[angel].color,
+        })
         $('#grantMarkProject' + projectId + 'Angel' + angel).css({
             "width" : percentage + "%",
             "background-color" : angels[angel].color,
             "border": "1px solid black",
         });
+        var oldBalance = balance[projectId].balance; 
+        console.log('old balance = ' + oldBalance);
+        var newBalance = oldBalance + grant.sum;
+        console.log('new balance = ' + newBalance);
+        balance[projectId].balance = newBalance;
+        $('#projectSum' + projectId).text('$' + numberWithCommas(newBalance));
+        
       }
     }  
 }
 
-function calculateAngelsBalance(){
-  angelsBalance = [limit,limit,limit,limit,limit,limit];
-  for (var projectId=0; projectId<projects.length; projectId++){
-    if (typeof projects[projectId].grantsDist === "undefined"){
-      console.log("projectId=" + projectId + " has no grants");
-      }
-    else {
-      for (var grantId=0; grantId<projects[projectId].grantsDist.length; grantId++){
-        angelsBalance[projects[projectId].grantsDist[grantId].angelId] -= projects[projectId].grantsDist[grantId].sum;
-      }
-    }  
-  }
-
+function numberWithCommas(x) {
+    x = x.toString();
+    var pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(x))
+        x = x.replace(pattern, "$1,$2");
+    return x;
 }
-  
-
 
