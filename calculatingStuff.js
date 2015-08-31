@@ -39,17 +39,18 @@ function showProjects(){
        }
     for (var project=0; project<projects.length; project++){  
         $('#rankedProjects').append('<div class="projectDisp clearfix" id="project'+ project + '"/>');
+      //  $('#project' + project).append('<div class="grantAmount" id="grantAmount' + project + '"/>');
         $('#project' + project).append('<div class="projectNames" id="projectName' + project + '"/>');
         $('#projectName' + project).append('<div class="projectTytle" id="projectTytle' + project + '">' + projects[project].name + '</div>');               
-        $('#project' + project).append('<div class="grantsBar" id="grantsBar' + project + '"/></div>');
-            for (var angel=0; angel < angels.length; angel++){
-                 $('#grantsBar' + project).append('<div class="grantMark" id="grantMarkProject' + project + 'Angel' + angel + '"/>');  
-            }
+        $('#project' + project).append('<div class="grantsBar" id="grantsBar' + project + '"/></div>');  
+        for (var angel=0; angel < angels.length; angel++){
+            $('#grantsBar' + project).append('<div class="grantMark" id="grantMarkProject' + project + 'Angel' + angel + '"/>');  
+        }
         $('#project' + project).append('<div class="projectSum" id="projectSum' + project + '"> $' + balance[project].balance + '</div></div>');
         $('#rankedProjects').append('<div class="backgroundLines" id="lines'+ project + '"/>');
-           for (var i=0; i<13; i++){
-              $('#lines' + project).append('<div class="theLines"/>');
-           }
+        for (var i=0; i<13; i++){
+           $('#lines' + project).append('<div class="theLines"/>');
+        }
     }
 }
 
@@ -116,14 +117,14 @@ function showNextAngelGrant(projectId,angel){
         $('#angelImage' + angel).css({
           	"width" :"120px",
 	          "height" : "120px",
-            "margin-top": "-9%",
+            "margin-top": "-35%",
             "border" : "5px solid " + angels[angel].color,
         })
         $('#grantMarkProject' + projectId + 'Angel' + angel).css({
             "width" : percentage + "%",
             "background-color" : angels[angel].color,
-            "border": "1px solid black",
-        });
+          });
+ //      $('#grantAmount' + projectId + 'Angel' + angel).text(numberWithCommas(grant.sum));
         var oldBalance = balance[projectId].balance; 
         console.log('old balance = ' + oldBalance);
         var newBalance = oldBalance + grant.sum;
