@@ -39,7 +39,8 @@ function showProjects(){
        }
     for (var project=0; project<projects.length; project++){  
         $('#rankedProjects').append('<div class="projectDisp clearfix" id="project'+ project + '"/>');
-      //  $('#project' + project).append('<div class="grantAmount" id="grantAmount' + project + '"/>');
+        $('#project' + project).append('<div class="grantAmount" id="grantAmount' + project + '"/>');
+        $('#grantAmount' + project).append('<div class="grantAmountSum" id="grantAmountSum' + project + '"/>');
         $('#project' + project).append('<div class="projectNames" id="projectName' + project + '"/>');
         $('#projectName' + project).append('<div class="projectTytle" id="projectTytle' + project + '">' + projects[project].name + '</div>');               
         $('#project' + project).append('<div class="grantsBar" id="grantsBar' + project + '"/></div>');  
@@ -102,6 +103,9 @@ function showNextGrant(){
             "margin" : "3px",
             "border" : "3px solid " + angels[angelProject.lastAngel].color,
         })
+    for (var projectId=0; projectId < projects.length; projectId++){
+      $('#grantAmountSum' + projectId).text('');
+    }
     angelProject.lastAngel +=1;
     angelProject.lastProject = 0;    
     showNextAngelGrant(angelProject.lastProject, angelProject.lastAngel);
@@ -124,7 +128,11 @@ function showNextAngelGrant(projectId,angel){
             "width" : percentage + "%",
             "background-color" : angels[angel].color,
           });
- //      $('#grantAmount' + projectId + 'Angel' + angel).text(numberWithCommas(grant.sum));
+       var sum = grant.sum;
+       $('#grantAmountSum' + projectId).text('$' + numberWithCommas(sum));
+       $('#grantAmountSum' + projectId).css({
+         "color" : angels[angel].color
+       });
         var oldBalance = balance[projectId].balance; 
         console.log('old balance = ' + oldBalance);
         var newBalance = oldBalance + grant.sum;
