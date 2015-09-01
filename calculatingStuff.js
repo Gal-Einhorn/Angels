@@ -101,7 +101,7 @@ function showNextGrant(){
 	          "height" : "70px",
             "margin-top" : "0",
             "margin" : "3px",
-            "border" : "3px solid " + angels[angelProject.lastAngel].color,
+        //    "border" : "3px solid " + angels[angelProject.lastAngel].color,
         })
     for (var projectId=0; projectId < projects.length; projectId++){
       $('#grantAmountSum' + projectId).text('');
@@ -122,7 +122,7 @@ function showNextAngelGrant(projectId,angel){
           	"width" :"120px",
 	          "height" : "120px",
             "margin-top": "-35%",
-            "border" : "5px solid " + angels[angel].color,
+         //   "border" : "5px solid " + angels[angel].color,
         })
         $('#grantMarkProject' + projectId + 'Angel' + angel).css({
             "width" : percentage + "%",
@@ -152,3 +152,6 @@ function numberWithCommas(x) {
     return x;
 }
 
+function showWinners(){
+  window.location.assign("file:///C:/Angels/Angels/podium.html");
+}
