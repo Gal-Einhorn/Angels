@@ -40,7 +40,8 @@ function submit(){
         updateGrants.update({angelId:angel, sum:parseInt(grantsDist.grants[project].sum)}, onComplete);
       } 
       //alert('Granted!');
-      titlelessalert("Granted!");
+      //titlelessalert("Granted!");
+      window.location.href = '../../thankYou.html';
 }    
 
 function titlelessalert(message){
@@ -61,11 +62,11 @@ function initiateGrantsDist(){
 function createProjectsForm(){
   $('#grants_form').append('<form name="grantsInvoker" id="grantsInvoker" action="">');
   for (var project=0; project<projects.length; project++){
-    $('#grantsInvoker').append('<div class="projectsNames" id="theProjectName'+project+'">'+projects[project].name+'</div>');
+    $('#grantsInvoker').append('<div class="projectsNames centered" id="theProjectName'+project+'">'+projects[project].name+'</div>');
     $('#grantsInvoker').append('<div class="grants clearfix" id="grantsArea'+project+'">');
          $('#grantsArea' + project).append('<img class="minus" id="minus'+project+'" onclick="minus('+project+')" src="http://i60.tinypic.com/2mwif7n.png"/>');
          $('#grantsArea' + project).append('<div class="numbers" id="numbers'+project+'">');
-                $('#numbers' + project).append('<input type="number" name="grant'+project+'" id="grant'+project+'" max="'+grantsDist.balance+'" class="text-input" onchange="updateBalance('+project+')"/></div>');
+                $('#numbers' + project).append('<input type="number" name="grant'+project+'" id="grant'+project+'" max="'+grantsDist.balance+'" class="text-input" onchange="updateBalance('+project+',1)"/></div>');
          $('#grantsArea' + project).append('<img class="plus" id="plus'+project+'" onclick="plus('+project+')"  src="http://i61.tinypic.com/1z384jo.png"/></div>');
   }
   $('#grants_form').append('<button type="submit" name="submit" class="button" id="submit_btn" value="Send" onclick="submit()">Grant!</button></form>');
@@ -75,14 +76,15 @@ function createProjectsForm(){
      $('.remainSum').append('<div id="sum2" id="sum">$'+ numberWithCommas(grantsDist.balance) +'</div>');
      $('.remainSum').append('<div class="coins" id="coins2">');
        $('#coins2').append('<img class="imgCoins" src="http://i59.tinypic.com/2q3r90z.png"/></div></div>');
-    
+  
 }
 
-function updateBalance(project){
+function updateBalance(project,needVerification){
     var grant = document.getElementById("grant"+project).value;
+    console.log('grant=' +grant);
     var projectName = projects[project].name
-    if (grant > grantsDist.balance){
-     // alert('Please choose a lower amount to grant');
+    if (grant > grantsDist.balance && needVerification==1){
+      titlelessalert('Please don`t exceed your budget ($200K)');
        $('#grant' + project).val(0);
     }
     else{
@@ -106,7 +108,7 @@ function minus(project){
   }
   if (grant-5000 >= 0){
       $('#grant'+project).val(grant-5000);
-      updateBalance(project);
+      updateBalance(project,0);
   }
   else{
    // alert("Please choose a positive sum");
@@ -119,13 +121,15 @@ function plus(project){
     grant = $("#grant"+project).val();
   }
   var newGrant = parseInt(grant)+5000;
-  if (grantsDist.balance -5000 >= 0){  
+  console.log('grantsDist.balance=' +grantsDist.balance);
+   if (grantsDist.balance - 5000 >= 0){  
     $('#grant'+project).val(newGrant);
-    updateBalance(project);
-  }
-  else{
+    console.log('newGrant' +newGrant);
+    updateBalance(project,0);
+    }
+    else{
  //   alert('Please choose a lower amount to grant');
-  }
+    }
 }
 
 function numberWithCommas(x) {
